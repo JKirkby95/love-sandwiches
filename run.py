@@ -14,25 +14,28 @@ SHEET = GSPREAD_CLIENT.open('love_sandwiches')
 
 def get_sales_data():
     """
-    Get sales fugures input from user
+    Get sales figures input from user
     """
-    print("Please enter sales data from the last market")
-    print("Data should be 6 numbers separated by commas.")
-    print("Example: 1,2,3,4,5")
+    while True:
+        print("Please enter sales data from the last market")
+        print("Data should be 6 numbers separated by commas.")
+        print("Example: 1,2,3,4,5")
 
-    data_str = input("Enter your data here:")
-    
-    sales_data = data_str.split(",")
-    validate_data(sales_data)
+        data_str = input("Enter your data here:")
+        
+        sales_data = data_str.split(",")
 
-    
+        if validate_data(sales_data):
+            print("Data is valid!")
+            break
 
+    return sales_data
 
 def validate_data(values):
     """
-    Raises error if strings are not converted to int , or if they are not exactly 6 values"
+    Raises error if strings are not converted to int , or if they are not exactly
+     6 values"
     """
-    
     try:
         [int(value) for value in values]
         if len(values) != 6:
@@ -41,6 +44,20 @@ def validate_data(values):
             )
     except ValueError as e:
         print(f'Invalid data: {e}, please try again.')
-    
+        return False
 
-get_sales_data()
+    return True
+    
+def update_sales_worksheet(data):
+    """
+    Update sales worksheet, add new row with the list provided.
+    """
+    print("updating sales sheet....")
+    sales_worksheet = SHEET.worksheet('sales')
+    sales_worksheet.append_row(data)
+    print("updated successfully")
+
+
+data = get_sales_data()
+sales_data = [int(num) for num in data]
+update_sales_worksheet(sales_data)
