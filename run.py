@@ -1,6 +1,5 @@
 import gspread
 from google.oauth2.service_account import Credentials
-from pprint import pprint
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -22,12 +21,12 @@ def get_sales_data():
         print("Data should be 6 numbers separated by commas.")
         print("Example: 1,2,3,4,5")
 
-        data_str = input("Enter your data here:")
+        data_str = input("Enter your data here:\n")
         
         sales_data = data_str.split(",")
 
         if validate_data(sales_data):
-            print("Data is valid!")
+            print("Data is valid!\n")
             break
 
     return sales_data
@@ -41,10 +40,10 @@ def validate_data(values):
         [int(value) for value in values]
         if len(values) != 6:
             raise ValueError(
-                f"Exactly 6 values needed, you provided {len(values)}"
+                f"Exactly 6 values needed, you provided {len(values)}\n"
             )
     except ValueError as e:
-        print(f'Invalid data: {e}, please try again.')
+        print(f'Invalid data: {e}, please try again.\n')
         return False
 
     return True
@@ -71,16 +70,16 @@ def update_worksheet(data ,worksheet):
     """
     Update surplus worksheet, add new row with the list provided.
     """
-    print(f"updating {worksheet} sheet....")
+    print(f"updating {worksheet} sheet....\n")
     worksheet_to_update = SHEET.worksheet(worksheet)
     worksheet_to_update.append_row(data)
-    print(f" {worksheet} updated successfully")
+    print(f" {worksheet} updated successfully\n")
 
 def calculate_surplus_data(sales_row):
     """
     Calculating surplus using subtraction
     """
-    print("Calculating surplus data...")
+    print("Calculating surplus data...\n")
     stock = SHEET.worksheet("stock").get_all_values()
     stock_row = stock[-1]
 
@@ -108,7 +107,7 @@ def calculate_stock_data(data):
     """
     Calculate the stock data
     """
-    print("Calculating stock data......")
+    print("Calculating stock data......\n")
     new_stock_data = [ ]
 
     for column in data:
@@ -134,5 +133,5 @@ def main():
     update_worksheet(stock_data, "stock")
 
 
-print("Welcome to Love Sandwiches Data Automation")
+print("Welcome to Love Sandwiches Data Automation\n")
 main()
